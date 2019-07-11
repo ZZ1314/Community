@@ -20,7 +20,6 @@ public class GithubProvider {
         //构建RequestBody的参数 传入参数为JSON
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         //创建RequestBody
-        System.out.println("accessTokenDTO:"+JSON.toJSONString(accessTokenDTO));
         RequestBody body = RequestBody.create(mediaType, JSON.toJSONString(accessTokenDTO));
         //创建Request请求
         Request request = new Request.Builder()
@@ -34,7 +33,6 @@ public class GithubProvider {
             String string = response.body().string();
             //分割出GitHub返回的AccessToken
             String token = string.split("&")[0].split("=")[1];
-            System.out.println("token:"+token);
             return token;
 
         } catch (IOException e) {
