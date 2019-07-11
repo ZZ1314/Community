@@ -5,3 +5,5 @@ spring:
     static-path-pattern: /**
   resources:
     static-locations: classpath:/templates/,classpath:/static/
+server:
+  port: 8888
