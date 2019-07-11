@@ -47,9 +47,10 @@ public class AuthorizeController {
         String accessToke = githubProvider.getAccessToke(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(accessToke);
         System.out.println(githubUser);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         if (githubUser != null) {
+//           登录成功 写cookie和session
             request.getSession().setAttribute("githubUser", githubUser);
+//            新建User对象
             User user = new User();
             user.setAccountID(String.valueOf(githubUser.getId()));
             user.setName(githubUser.getName());
@@ -58,7 +59,6 @@ public class AuthorizeController {
             user.setGmtModified(user.getGmtCreate());
             userMapper.insert(user);
             return "redirect:/";
-//           登录成功 写cookie和session
         } else {
 //            登录失败 重新登录
             return "redirect:/";

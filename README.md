@@ -13,3 +13,15 @@ git push<hr>
 3.发送access_token信息请求user信息<br>
     返回user信息<br>
 4.存入数据，更新登录状态<hr>
+<h1>SQL DDL</h1>
+```sql
+CREATE TABLE `USER` (
+  `ID` int(100) NOT NULL AUTO_INCREMENT,
+  `ACCOUNT_ID` varchar(100) DEFAULT NULL,
+  `NAME` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
+  `TOKEN` char(36) DEFAULT NULL,
+  `GMT_CREATE` mediumtext,
+  `GMT_MODIFIED` mediumtext,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1 COMMENT='用户信息'
+```
