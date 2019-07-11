@@ -33,6 +33,7 @@ public class AuthorizeController {
     @Autowired
     private UserMapper userMapper;
 
+    //处理github返回的code
     @GetMapping(value = "/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
@@ -45,28 +46,31 @@ public class AuthorizeController {
                 clientUri,
                 state
         );
+        //根据gitHub文档发送AccessToken请求返回GitHub端的Token信息
         String accessToke = githubProvider.getAccessToke(accessTokenDTO);
+        //根据GitHub返回的Token信息请求获取用户信息
         GithubUser githubUser = githubProvider.getUser(accessToke);
         System.out.println(githubUser);
 
-//           如果请求githubUser不为空 则登录成功
+        //如果请求githubUser不为空 则登录成功
         if (githubUser != null) {
-//            生成本地Token
+        //生成本地Token  UUID格式
             String token = UUID.randomUUID().toString();
-//            新建本地User对象
+        //新建本地User存储对象
             User user = new User();
             user.setAccountID(String.valueOf(githubUser.getId()));
             user.setName(githubUser.getName());
             user.setToken(token);
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
+            user.setBio(githubUser.getBio());
             userMapper.insert(user);
-//          写入cookie
+        //写入cookie发送给客户端
             Cookie cookie = new Cookie("token", token);
             response.addCookie(cookie);
             return "redirect:/";
         } else {
-//            登录失败 重新登录
+        //登录失败 重新登录
             return "redirect:/";
         }
     }
