@@ -1,6 +1,8 @@
 package org.muye.community.mapper;
 
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.muye.community.model.User;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +15,6 @@ public interface UserMapper {
     @Insert("INSERT INTO user (account_id,name,token,gmt_create,gmt_modified) " +
             "VALUES(#{accountID},#{name},#{token},#{gmtCreate},#{gmtModified})")
     void insert(User user);
+    @Select("SELECT * FROM user WHERE token = #{token}")
+    User findByToken(@Param("token") String token);
 }
