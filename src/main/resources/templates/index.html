@@ -8,9 +8,38 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.css">
 </head>
-<body>
+<body style="background-color:#f0f0f0">
 <!--导航条-->
 <div th:insert="~{htmlElement/nav.html::topnav}"></div>
 <!--body-->
+<div class="container-fluid" style="margin: 20px;padding:20px 20px 100px 20px;background-color: #ffffff">
+    <div class="row">
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+            <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp&nbsp发现</h2>
+            <hr>
+            <div th:each="questionDTO:${questionDTOList}" th:if="${!questionDTOList.isEmpty()}">
+                <div class="media" style="margin-bottom: 15px">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object" th:src="${questionDTO.getUser().getAvatarUrl()}"
+                                 style="height: 64px">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading" th:text="${'标题: '+questionDTO.getTitle()}">标题</h4>
+                        [[${questionDTO.getDescription()}]]<br>
+                        <span style="font-size: 12px;font-weight: normal;color: #999" th:text="${questionDTO.getCommentCount()+'个回复 ·'+questionDTO.getViewCount()+'个浏览 ·1分钟前'}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+            <h3>热门话题</h3><br>
+            <div style="text-align:left;line-height: 30px;font-size: 20px">
+                PlaceHolder
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
