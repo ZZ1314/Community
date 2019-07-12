@@ -26,9 +26,11 @@
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading" th:text="${'标题: '+questionDTO.getTitle()}">标题</h4>
+                        <h4 class="media-heading" th:text="${questionDTO.getTitle()}">标题</h4>
                         [[${questionDTO.getDescription()}]]<br>
-                        <span style="font-size: 12px;font-weight: normal;color: #999" th:text="${questionDTO.getCommentCount()+'个回复 ·'+questionDTO.getViewCount()+'个浏览 ·1分钟前'}"></span>
+                        <span style="font-size: 12px;font-weight: normal;color: #999" th:text="${questionDTO.getCommentCount()+'个回复 ·'
+                        +questionDTO.getViewCount()+'个浏览 ·'
+                        +#dates.format(questionDTO.getGmtCreate(),'yyyy-MM-dd hh:mm:ss')+'创建'}"></span>
                     </div>
                 </div>
             </div>
