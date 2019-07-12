@@ -53,7 +53,7 @@ public class AuthorizeController {
         System.out.println(githubUser);
 
         //如果请求githubUser不为空 则登录成功
-        if (githubUser != null) {
+        if (githubUser != null && githubUser.getId()!=null) {
         //生成本地Token  UUID格式
             String token = UUID.randomUUID().toString();
         //新建本地User存储对象
@@ -64,6 +64,7 @@ public class AuthorizeController {
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             user.setBio(githubUser.getBio());
+            user.setAvatarUrl(githubUser.getAvatar_url());
             userMapper.insert(user);
         //写入cookie发送给客户端
             Cookie cookie = new Cookie("token", token);

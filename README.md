@@ -26,3 +26,21 @@ CREATE TABLE `USER` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1 COMMENT='用户信息'
 ```
+
+```sql
+create table QUESTION
+(
+	id int auto_increment,
+	title nvarchar(50) null,
+	description text null,
+	gmt_create BIGINT null,
+	gmt_modified BIGINT null,
+	creator int null,
+	comment_count int default 0 null,
+	view_count int default 0 null,
+	like_count int default 0 null,
+	tag nvarchar(255) null,
+	constraint question_pk
+		primary key (id)
+);
+```

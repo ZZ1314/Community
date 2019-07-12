@@ -32,6 +32,7 @@
                     <li class="dropdown" th:if="${session.githubUser != null}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false" th:text="${'欢迎你: '+session.githubUser.getName()}"><span class="caret"></span></a>
+                        <img th:src="${session.githubUser.getAvatarUrl()}" class="img-rounded">
                         <ul class="dropdown-menu">
                             <li><a href="#">消息中心</a></li>
                             <li><a href="#">个人资料</a></li>
