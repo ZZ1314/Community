@@ -31,23 +31,29 @@ public class PublishController {
     }
 
     @PostMapping("/publish")
-    public String doPublish(Question question, HttpServletRequest request, Model model){
-        if(question.getTitle().equals("")||question.getDescription().equals("")||question.getTag().equals("")){
-            model.addAttribute("error","填写内容不可为空!");
+    public String doPublish(Question question, HttpServletRequest request, Model model) {
+        //简单处理判定内容逻辑 应放在前端
+        if (question.getTitle().equals("") || question.getDescription().equals("") || question.getTag().equals("")) {
+            model.addAttribute("error", "填写内容不可为空!");
             return "publish";
         }
         User user = null;
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie:cookies) {
-            if(cookie.getName().equals("token")){
-                String token = cookie.getValue();
-                user = userMapper.findByToken(token);
-                if(user==null){
-                    model.addAttribute("error","用户未登陆");
-                    return "publish";
+        if (cookies != null && cookies.length != 0) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    String token = cookie.getValue();
+                    user = userMapper.findByToken(token);
+                    if (user == null) {
+                        model.addAttribute("error", "用户未登陆");
+                        return "publish";
+                    }
+                    break;
                 }
-                break;
             }
+        }else{
+            model.addAttribute("error", "用户未登陆");
+            return "publish";
         }
         question.setCreator(user.getId());
         question.setGmtCreate(System.currentTimeMillis());

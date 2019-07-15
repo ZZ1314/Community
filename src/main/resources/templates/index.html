@@ -19,7 +19,7 @@
             <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp&nbsp发现</h2>
             <hr>
 <!--            信息缩略-->
-            <div th:each="questionDTO:${paginationDTO.questions}" th:if="${!paginationDTO.questions.isEmpty()}">
+            <div th:if="${!(paginationDTO==null||paginationDTO.getQuestions().isEmpty())}" th:each="questionDTO:${paginationDTO.getQuestions()}">
                 <div class="media" style="margin-bottom: 15px">
                     <div class="media-left">
                         <a href="#">

@@ -23,7 +23,7 @@ public class PaginationDTO {
     private boolean showNext;
     //当前页码
     private Integer page;
-    //totalpage
+    //totalPage
     private Integer totalPage;
     //总计显示的页码列表
     private List<Integer> pages = new ArrayList<>();
