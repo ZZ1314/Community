@@ -23,7 +23,6 @@ public class QuestionService {
     private QuestionMapper questionMapper;
     @Autowired
     private UserMapper userMapper;
-
     public PaginationDTO list(Integer page, Integer size) {
         //查询总数据计算总页数
         Integer totalPage;
@@ -54,4 +53,35 @@ public class QuestionService {
         paginationDTO.setPagination(totalCount,page,size,totalPage);
         return paginationDTO;
     }
+    public PaginationDTO profileList(Integer page, Integer size,User user) {
+        //查询总数据计算总页数
+        Integer totalPage;
+        Integer totalCount = questionMapper.queryCountByCreator(user.getId());
+        if (totalCount % size ==0){
+            totalPage = totalCount/size;
+        }else {
+            totalPage = totalCount/size+1;
+        }
+        //对page范围进行约束
+        page=page<1?1:page;
+        page=page>totalPage?totalPage:page;
+        //计算分页的offset
+        Integer offset = size*(page-1);
+        List<Question> questions = questionMapper.queryQuestionByCreator(user.getId(),offset,size);
+        List<QuestionDTO> questionDTOList = new ArrayList<>();
+        //遍历question列表获取用户信息 加入questionDTO中传输
+        PaginationDTO paginationDTO = new PaginationDTO();
+        for (Question question : questions) {
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(question, questionDTO);
+            questionDTO.setUser(user);
+            questionDTOList.add(questionDTO);
+        }
+        paginationDTO.setQuestions(questionDTOList);
+        //通过DTO内部方法赋值
+        paginationDTO.setPagination(totalCount,page,size,totalPage);
+        return paginationDTO;
+    }
+
+
 }

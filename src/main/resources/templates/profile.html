@@ -18,6 +18,54 @@
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
             <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true" th:text="${'  '+sectionName}"></span></h2>
             <hr>
+<!--            信息框-->
+            <div th:if="${!(paginationDTO==null||paginationDTO.getQuestions().isEmpty())}" th:each="questionDTO:${paginationDTO.getQuestions()}">
+                <div class="media" style="margin-bottom: 15px">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object" th:src="${questionDTO.getUser().getAvatarUrl()}"
+                                 style="height: 64px" th:if="${questionDTO.getUser()!=null}">
+                            <img class="media-object" th:if="${questionDTO.getUser()==null}" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563269335633&di=3bfea90ac327f13d14a47d10c421215d&imgtype=0&src=http%3A%2F%2Fimg5q.duitang.com%2Fuploads%2Fitem%2F201408%2F28%2F20140828225101_ytMHi.jpeg"
+                                 style="height: 64px">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading" th:text="${questionDTO.getTitle()}">标题</h4>
+                        [[${questionDTO.getDescription()}]]<br>
+                        <span style="font-size: 12px;font-weight: normal;color: #999" th:text="${questionDTO.getCommentCount()+'个回复 ·'
+                        +questionDTO.getViewCount()+'个浏览 ·'
+                        +#dates.format(questionDTO.getGmtCreate(),'yyyy-MM-dd hh:mm:ss')+'创建'}"></span>
+                    </div>
+                </div>
+            </div>
+            <!--分页-->
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li>
+                        <a href="?page=1" aria-label="Previous" th:if="${paginationDTO.isShowFirstPage()}">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a ria-label="Previous"  th:if="${paginationDTO.isShowPrevious()}" th:href="'?page='+(${paginationDTO.getPage()-1})">
+                            <span aria-hidden="true">&lt;</span>
+                        </a>
+                    </li>
+                    <li th:each="page:${paginationDTO.pages}" th:class="${paginationDTO.page == page}? 'active':''">
+                        <a th:text="${page}" th:href="${'?page='+page}"></a>
+                    </li>
+                    <li>
+                        <a  aria-label="Next" th:if="${paginationDTO.isShowNext()}" th:href="'?page='+(${paginationDTO.getPage()+1})">
+                            <span aria-hidden="true">&gt;</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" th:href="'?page='+(${paginationDTO.totalPage})" aria-label="Next" th:if="${paginationDTO.isShowEndPage()}">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
 
         </div>
         <!--        右侧body-->

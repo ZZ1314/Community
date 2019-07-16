@@ -24,4 +24,8 @@ public interface QuestionMapper {
 
     @Select("SELECT count(1) FROM question")
     Integer count();
+    @Select("SELECT * FROM question WHERE creator = #{id} ORDER BY gmt_create DESC LIMIT #{offset},#{size}")
+    List<Question> queryQuestionByCreator(Integer id,Integer offset,Integer size);
+    @Select("SELECT count(1) FROM question WHERE creator = #{id}")
+    Integer queryCountByCreator(Integer id);
 }
