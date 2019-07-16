@@ -23,18 +23,18 @@
                     <div class="navbar-header">
                         <a class="navbar-brand" href="/publish" style="font-size: medium">发起问题</a>
                     </div>
-                    <li class="dropdown" th:if="${session.githubUser != null}">
+                    <li class="dropdown" th:if="${session.user != null}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false" th:text="${'欢迎你: '+session.githubUser.getName()}">
+                           aria-expanded="false" th:text="${'欢迎你: '+session.user.getName()}">
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">消息中心</a></li>
+                            <li><a href="/profile/question">消息中心</a></li>
                             <li><a href="#">个人资料</a></li>
                             <li><a href="#">退出登录</a></li>
                         </ul>
                     </li>
-                    <li th:if="${session.githubUser==null}">
+                    <li th:if="${session.user==null}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false"> 登录 <span class="caret"></span></a>
                         <ul class="dropdown-menu">

@@ -37,24 +37,8 @@ public class PublishController {
             model.addAttribute("error", "填写内容不可为空!");
             return "publish";
         }
-        User user = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null && cookies.length != 0) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    user = userMapper.findByToken(token);
-                    if (user == null) {
-                        model.addAttribute("error", "用户未登陆");
-                        return "publish";
-                    }
-                    break;
-                }
-            }
-        }else{
-            model.addAttribute("error", "用户未登陆");
-            return "publish";
-        }
+        User user = (User) request.getSession().getAttribute("user");
+
         question.setCreator(user.getId());
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreate());
