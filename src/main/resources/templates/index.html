@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>慕晔社区</title>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="js/bootstrap.min.js" type="application/javascript"></script>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="application/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.css">
 </head>
 <body style="background-color:#f0f0f0">
 <!--导航条-->
@@ -23,7 +23,7 @@
             <div th:if="${!(paginationDTO==null||paginationDTO.getQuestions().isEmpty())}" th:each="questionDTO:${paginationDTO.getQuestions()}">
                 <div class="media" style="margin-bottom: 15px">
                     <div class="media-left">
-                        <a href="#">
+                        <a th:href="${'/question/'+questionDTO.getId()}">
                             <img class="media-object" th:src="${questionDTO.getUser().getAvatarUrl()}"
                                  style="height: 64px" th:if="${questionDTO.getUser()!=null}">
                             <img class="media-object" th:if="${questionDTO.getUser()==null}" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563269335633&di=3bfea90ac327f13d14a47d10c421215d&imgtype=0&src=http%3A%2F%2Fimg5q.duitang.com%2Fuploads%2Fitem%2F201408%2F28%2F20140828225101_ytMHi.jpeg"
@@ -31,11 +31,11 @@
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading" th:text="${questionDTO.getTitle()}">标题</h4>
-                        [[${questionDTO.getDescription()}]]<br>
+                        <a th:href="${'/question/'+questionDTO.getId()}"><h4 class="media-heading" th:text="${questionDTO.getTitle()}">标题</h4></a>
+                        <span th:text="${#strings.abbreviate(questionDTO.getDescription(),30)}"></span><br>
                         <span style="font-size: 12px;font-weight: normal;color: #999" th:text="${questionDTO.getCommentCount()+'个回复 ·'
                         +questionDTO.getViewCount()+'个浏览 ·'
-                        +#dates.format(questionDTO.getGmtCreate(),'yyyy-MM-dd hh:mm:ss')+'创建'}"></span>
+                        +#dates.format(questionDTO.getGmtCreate(),'yyyy-MM-dd HH:mm:ss')+'创建'}"></span>
                     </div>
                 </div>
             </div>

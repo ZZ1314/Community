@@ -28,4 +28,6 @@ public interface QuestionMapper {
     List<Question> queryQuestionByCreator(Integer id,Integer offset,Integer size);
     @Select("SELECT count(1) FROM question WHERE creator = #{id}")
     Integer queryCountByCreator(Integer id);
+    @Select("SELECT * FROM question WHERE id = #{id}")
+    Question queryQuestionById(Integer id);
 }

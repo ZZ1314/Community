@@ -50,27 +50,34 @@ public class AuthorizeController {
         String accessToke = githubProvider.getAccessToke(accessTokenDTO);
         //根据GitHub返回的Token信息请求获取用户信息
         GithubUser githubUser = githubProvider.getUser(accessToke);
-
-        //如果请求githubUser不为空 则登录成功
-        if (githubUser != null && githubUser.getId()!=null) {
         //生成本地Token  UUID格式
-            String token = UUID.randomUUID().toString();
-        //新建本地User存储对象
-            User user = new User();
-            user.setAccountID(String.valueOf(githubUser.getId()));
-            user.setName(githubUser.getName());
-            user.setToken(token);
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
-            user.setBio(githubUser.getBio());
-            user.setAvatarUrl(githubUser.getAvatar_url());
-            userMapper.insert(user);
-        //写入cookie发送给客户端
+        String token = UUID.randomUUID().toString();
+        //如果请求githubUser不为空 则登录成功
+        if (githubUser != null && githubUser.getId() != null) {
+            //判断数据库是否已有该用户
+            //如果没有 创建新
+            User userByAccountId = userMapper.findByAccountId(githubUser.getId().intValue());
+            if (userByAccountId == null) {
+                //新建本地User存储对象
+                User user = new User();
+                user.setAccountID(String.valueOf(githubUser.getId()));
+                user.setName(githubUser.getName());
+                user.setToken(token);
+                user.setGmtCreate(System.currentTimeMillis());
+                user.setGmtModified(user.getGmtCreate());
+                user.setBio(githubUser.getBio());
+                user.setAvatarUrl(githubUser.getAvatar_url());
+                userMapper.insert(user);
+                //如果有 更新该用户的token
+            }else {
+                userMapper.updateUserToken(userByAccountId.getId(),token);
+            }
+            //写入cookie发送给客户端
             Cookie cookie = new Cookie("token", token);
             response.addCookie(cookie);
             return "redirect:/";
         } else {
-        //登录失败 重新登录
+            //登录失败 重新登录
             return "redirect:/";
         }
     }
