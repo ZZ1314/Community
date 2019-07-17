@@ -24,9 +24,9 @@
                 <div class="media" style="margin-bottom: 15px">
                     <div class="media-left">
                         <a th:href="${'/question/'+questionDTO.getId()}">
-                            <img class="media-object" th:src="${questionDTO.getUser().getAvatarUrl()}"
+                            <img class="media-object img-thumbnail" th:src="${questionDTO.getUser().getAvatarUrl()}"
                                  style="height: 64px" th:if="${questionDTO.getUser()!=null}">
-                            <img class="media-object" th:if="${questionDTO.getUser()==null}" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563269335633&di=3bfea90ac327f13d14a47d10c421215d&imgtype=0&src=http%3A%2F%2Fimg5q.duitang.com%2Fuploads%2Fitem%2F201408%2F28%2F20140828225101_ytMHi.jpeg"
+                            <img class="media-object img-thumbnail" th:if="${questionDTO.getUser()==null}" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563269335633&di=3bfea90ac327f13d14a47d10c421215d&imgtype=0&src=http%3A%2F%2Fimg5q.duitang.com%2Fuploads%2Fitem%2F201408%2F28%2F20140828225101_ytMHi.jpeg"
                                  style="height: 64px">
                         </a>
                     </div>

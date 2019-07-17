@@ -1,17 +1,21 @@
 package org.muye.community.controller;
 
+import org.apache.ibatis.annotations.Param;
 import org.muye.community.mapper.QuestionMapper;
 import org.muye.community.mapper.UserMapper;
 import org.muye.community.model.Question;
 import org.muye.community.model.User;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Zz
@@ -38,11 +42,23 @@ public class PublishController {
             return "publish";
         }
         User user = (User) request.getSession().getAttribute("user");
+        if (question.getId() == null) {
+            question.setCreator(user.getId());
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.create(question);
+            return "redirect:/";
+        }else {
+            question.setGmtModified(System.currentTimeMillis());
+            questionMapper.updateQuestion(question);
+            return "redirect:/";
+        }
+    }
 
-        question.setCreator(user.getId());
-        question.setGmtCreate(System.currentTimeMillis());
-        question.setGmtModified(question.getGmtCreate());
-        questionMapper.create(question);
-        return "redirect:/";
+    @GetMapping("/publish/{id}")
+    public String edit(@PathVariable("id") Integer id,Model model) {
+        Question question = questionMapper.queryQuestionById(id);
+        model.addAttribute(question);
+        return "publish";
     }
 }

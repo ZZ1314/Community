@@ -2,6 +2,7 @@ package org.muye.community.mapper;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.muye.community.model.Question;
 import org.springframework.stereotype.Repository;
 
@@ -30,4 +31,6 @@ public interface QuestionMapper {
     Integer queryCountByCreator(Integer id);
     @Select("SELECT * FROM question WHERE id = #{id}")
     Question queryQuestionById(Integer id);
+    @Update("UPDATE question SET title=#{title},gmt_modified=#{gmtModified},tag=#{tag},description=#{description} WHERE id = #{id}")
+    void updateQuestion(Question question);
 }
