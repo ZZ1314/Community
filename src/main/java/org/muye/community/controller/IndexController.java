@@ -2,6 +2,7 @@ package org.muye.community.controller;
 
 import org.muye.community.dto.PaginationDTO;
 import org.muye.community.mapper.QuestionMapper;
+import org.muye.community.model.QuestionExample;
 import org.muye.community.model.User;
 import org.muye.community.provider.UserProvider;
 import org.muye.community.service.QuestionService;
@@ -32,7 +33,9 @@ public class IndexController {
                         @RequestParam(name = "size", defaultValue = "5") Integer size,
                         HttpServletRequest request) {
         //刷新列表信息
-        if (questionMapper.count() != 0) {
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria().andIdIsNotNull();
+        if (questionMapper.countByExample(questionExample) != 0) {
             PaginationDTO paginationDTO = questionService.list(page, size);
             model.addAttribute(paginationDTO);
         }else {

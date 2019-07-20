@@ -1,11 +1,9 @@
 package org.muye.community.controller;
 
-import org.apache.ibatis.annotations.Param;
 import org.muye.community.mapper.QuestionMapper;
-import org.muye.community.mapper.UserMapper;
 import org.muye.community.model.Question;
+import org.muye.community.model.QuestionExample;
 import org.muye.community.model.User;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,9 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @author Zz
@@ -26,8 +23,6 @@ public class PublishController {
 
     @Autowired
     private QuestionMapper questionMapper;
-    @Autowired
-    private UserMapper userMapper;
 
     @GetMapping("/publish")
     public String publish() {
@@ -46,18 +41,27 @@ public class PublishController {
             question.setCreator(user.getId());
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.create(question);
+            question.setCommentCount(0);
+            question.setLikeCount(0);
+            question.setViewCount(0);
+            questionMapper.insert(question);
             return "redirect:/";
         }else {
             question.setGmtModified(System.currentTimeMillis());
-            questionMapper.updateQuestion(question);
+            QuestionExample questionExample = new QuestionExample();
+            questionExample.createCriteria().andIdEqualTo(question.getId());
+            questionMapper.updateByExampleSelective(question, questionExample);
             return "redirect:/";
         }
     }
 
     @GetMapping("/publish/{id}")
     public String edit(@PathVariable("id") Integer id,Model model) {
-        Question question = questionMapper.queryQuestionById(id);
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria().andIdEqualTo(id);
+        List<Question> questions = questionMapper.selectByExampleWithBLOBs(questionExample);
+//        List<Question> questions = questionMapper.selectByExample(questionExample);
+        Question question = questions.get(0);
         model.addAttribute(question);
         return "publish";
     }

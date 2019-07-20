@@ -18,8 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 @Service
 public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
-    private UserMapper userMapper;
-    @Autowired
     private UserProvider userProvider;
 
     @Override

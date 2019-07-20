@@ -4,6 +4,7 @@ import org.muye.community.dto.AccessTokenDTO;
 import org.muye.community.dto.GithubUser;
 import org.muye.community.mapper.UserMapper;
 import org.muye.community.model.User;
+import org.muye.community.model.UserExample;
 import org.muye.community.provider.GithubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -32,7 +34,7 @@ public class AuthorizeController {
     @Value("${github.client.secret}")
     private String clientSecret;
     @Autowired
-    private UserMapper userMapper;
+    UserMapper userMapper;
 
     //处理github返回的code
     @GetMapping(value = "/callback")
@@ -57,11 +59,14 @@ public class AuthorizeController {
         if (githubUser != null && githubUser.getId() != null) {
             //判断数据库是否已有该用户
             //如果没有 创建新
-            User userByAccountId = userMapper.findByAccountId(githubUser.getId().intValue());
+            UserExample userExample = new UserExample();
+            userExample.createCriteria().andAccountIdEqualTo(githubUser.getId().toString());
+            List<User> users = userMapper.selectByExample(userExample);
+            User userByAccountId = users.get(0);
             if (userByAccountId == null) {
                 //新建本地User存储对象
                 User user = new User();
-                user.setAccountID(String.valueOf(githubUser.getId()));
+                user.setAccountId(String.valueOf(githubUser.getId()));
                 user.setName(githubUser.getName());
                 user.setToken(token);
                 user.setGmtCreate(System.currentTimeMillis());
@@ -70,8 +75,12 @@ public class AuthorizeController {
                 user.setAvatarUrl(githubUser.getAvatar_url());
                 userMapper.insert(user);
                 //如果有 更新该用户的token
-            }else {
-                userMapper.updateUserToken(userByAccountId.getId(),token);
+            } else {
+                UserExample userUpdateExample = new UserExample();
+                userUpdateExample.createCriteria().andIdEqualTo(userByAccountId.getId());
+                User updateUser = new User();
+                updateUser.setToken(token);
+                userMapper.updateByExampleSelective(updateUser, userUpdateExample);
             }
             //写入cookie发送给客户端
             Cookie cookie = new Cookie("token", token);
@@ -82,8 +91,9 @@ public class AuthorizeController {
             return "redirect:/";
         }
     }
+
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request,HttpServletResponse response){
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
         request.getSession().removeAttribute("user");
         Cookie cookie = new Cookie("token", null);
         response.addCookie(cookie);
