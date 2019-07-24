@@ -44,6 +44,8 @@
         </table>
         <table schema="communtiy" tableName="question" domainObjectName="Question" >
         </table>
+        <table schema="communtiy" tableName="comment" domainObjectName="Comment" >
+        </table>
 
     </context>
 </generatorConfiguration>

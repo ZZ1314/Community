@@ -2,6 +2,7 @@ package org.muye.community.service;
 
 import org.muye.community.dto.PaginationDTO;
 import org.muye.community.dto.QuestionDTO;
+import org.muye.community.mapper.OriQuestionMapper;
 import org.muye.community.mapper.QuestionMapper;
 import org.muye.community.mapper.UserMapper;
 import org.muye.community.model.Question;
@@ -24,6 +25,8 @@ public class QuestionService {
     private QuestionMapper questionMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private OriQuestionMapper oriQuestionMapper;
 
     public PaginationDTO list(Integer page, Integer size) {
         //查询总数据计算总页数
@@ -41,7 +44,7 @@ public class QuestionService {
         page = page > totalPage ? totalPage : page;
         //计算分页的offset
         Integer offset = size * (page - 1);
-        List<Question> questions = questionMapper.list(offset, size);
+        List<Question> questions = oriQuestionMapper.list(offset, size);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         //遍历question列表获取用户信息 加入questionDTO中传输
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -74,7 +77,7 @@ public class QuestionService {
         page = page > totalPage ? totalPage : page;
         //计算分页的offset
         Integer offset = size * (page - 1);
-        List<Question> questions = questionMapper.queryQuestionByCreator(user.getId(), offset, size);
+        List<Question> questions = oriQuestionMapper.queryQuestionByCreator(user.getId(), offset, size);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         //遍历question列表获取用户信息 加入questionDTO中传输
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -96,6 +99,15 @@ public class QuestionService {
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
         questionDTO.setUser(user);
+        return questionDTO;
+    }
+
+    public QuestionDTO increaseViewCount(QuestionDTO questionDTO) {
+        Question question = new Question();
+        BeanUtils.copyProperties(questionDTO, question);
+        question.setViewCount(question.getViewCount()+1);
+        questionMapper.updateByPrimaryKey(question);
+        questionDTO.setViewCount(questionDTO.getViewCount()+1);
         return questionDTO;
     }
 }
