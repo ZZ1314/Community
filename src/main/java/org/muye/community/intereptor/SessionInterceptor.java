@@ -1,16 +1,12 @@
 package org.muye.community.intereptor;
 
-import org.muye.community.mapper.UserMapper;
 import org.muye.community.model.User;
 import org.muye.community.provider.NotifyCountProvider;
 import org.muye.community.provider.UserProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 

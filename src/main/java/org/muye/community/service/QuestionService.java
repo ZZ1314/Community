@@ -74,8 +74,8 @@ public class QuestionService {
             totalPage = totalCount / size + 1;
         }
         //对page范围进行约束
-        if(totalPage<=0){
-            totalPage=1;
+        if (totalPage <= 0) {
+            totalPage = 1;
         }
         page = page < 1 ? 1 : page;
         page = page > totalPage ? totalPage : page;
@@ -85,6 +85,9 @@ public class QuestionService {
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         //遍历question列表获取用户信息 加入questionDTO中传输
         PaginationDTO paginationDTO = new PaginationDTO();
+        if(questions.size()==0){
+            return paginationDTO;
+        }
         for (Question question : questions) {
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);

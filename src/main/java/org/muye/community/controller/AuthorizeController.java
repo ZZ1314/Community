@@ -62,7 +62,10 @@ public class AuthorizeController {
             UserExample userExample = new UserExample();
             userExample.createCriteria().andAccountIdEqualTo(githubUser.getId().toString());
             List<User> users = userMapper.selectByExample(userExample);
-            User userByAccountId = users.get(0);
+            User userByAccountId = null;
+            if (users.size() != 0) {
+                userByAccountId = users.get(0);
+            }
             if (userByAccountId == null) {
                 //新建本地User存储对象
                 User user = new User();

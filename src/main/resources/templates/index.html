@@ -16,7 +16,7 @@
     <div class="row">
         <!--        左侧body-->
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-            <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp&nbsp发现</h2>
+            <h4><span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp&nbsp发现</h4>
             <div class="alert alert-danger" role="alert" th:text="${#request.getAttribute('msg')}"
                  th:if="${#request.getAttribute('msg')!=null}"></div>
             <hr>
@@ -78,7 +78,19 @@
         </div>
         <!--        右侧body-->
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-            <h3>站长信息</h3><br>
+            <h4>站点信息</h4><hr>
+            <span style="font-size: small;">
+                本站后端使用SSM框架+前端Thymeleaf渲染<br>
+                数据库为MySQL5.7<br>
+                因未完整的学习前端部分所以页面主要仿照BootStrap样式<br>
+                为熟悉多种开发方式 部分数据前后端分离<br>
+                简化开发使用了MyBatis-generator lombok<br>
+                富文本插件为 <a href="https://pandao.github.io/">https://pandao.github.io/</a><br>
+                云服务器问题未开放图片上传<br>
+                水平有限 第一次独立做DEMO 有时间逐步完善<br>
+                目前仅支持GitHub登录<br>
+            </span>
+            <h4>站长信息</h4><br>
             <a href="/img/qr.png" class="thumbnail">
                 <img src="/img/qr.png" alt="微信" class="img-thumbnail">
             </a>

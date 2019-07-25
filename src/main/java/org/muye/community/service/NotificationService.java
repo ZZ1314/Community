@@ -35,7 +35,7 @@ public class NotificationService {
         //查询总数据计算总页数
         Integer totalPage;
         NotificationExample notificationExample = new NotificationExample();
-        notificationExample.createCriteria().andReceiverEqualTo(user.getId().longValue());
+        notificationExample.createCriteria().andReceiverEqualTo(user.getId().longValue()).andStatusEqualTo(0);
         Integer totalCount = notificationMapper.countByExample(notificationExample);
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
@@ -57,13 +57,6 @@ public class NotificationService {
         if (notifications.size() == 0) {
             return paginationDTO;
         }
-//        //获取通知的发送者
-//        Set<Integer> disUserIds = notifications.stream().map(notify -> notify.getNotifier().intValue()).collect(Collectors.toSet());
-//        ArrayList<Integer> userIds = new ArrayList<>(disUserIds);
-//        UserExample userExample = new UserExample();
-//        userExample.createCriteria().andIdIn(userIds);
-//        List<User> users = userMapper.selectByExample(userExample);
-//        Map<Integer, User> userMap = users.stream().collect(Collectors.toMap(u -> u.getId(), u -> u));
         for (Notification notification : notifications) {
             NotificationDTO notificationDTO = new NotificationDTO();
             notificationDTO.setGmtCreate(notification.getGmeCreate());
