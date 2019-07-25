@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:style="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>发起问题</title>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/js/community.js" type="application/javascript"></script>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.css">
 </head>
@@ -35,17 +36,38 @@
                 </div>
                 <div class="form-group">
                     <label for="description">添加标签：</label>
-                    <input type="text" class="form-control" id="tag" name="tag" placeholder="输入标签以 ',' 隔开" value="默认标签" th:if="${question==null}">
-                    <input type="text" class="form-control" id="tag" name="tag" placeholder="输入标签以 ',' 隔开" value="默认标签" th:if="${question!=null}" th:value="${question.tag}">
+                    <input readonly="readonly" type="text" class="form-control" id="tag" name="tag" placeholder="请选择下方问题标签"  th:if="${question==null}">
+                    <input readonly="readonly" type="text" class="form-control" id="tag" name="tag" placeholder="请选择下方问题标签"  th:if="${question!=null}" th:value="${question.tag}">
                 </div>
-                <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error!=null}"></div>
+                <div>
+                            <span class="label label-info" style="margin-right: 10px" onclick="selectTag('大杂烩')">
+                                <span class="glyphicon glyphicon-tags" style="font-size: 14px;line-height: 14px">&nbsp;大杂烩</span>
+                            </span>
+                            <span class="label label-info" style="margin-right: 10px" onclick="selectTag('编程')">
+                                <span class="glyphicon glyphicon-tags" style="font-size: 14px;line-height: 14px">&nbsp;编程</span>
+                            </span>
+                            <span class="label label-info" style="margin-right: 10px" onclick="selectTag('娱乐')">
+                                <span class="glyphicon glyphicon-tags" style="font-size: 14px;line-height: 14px">&nbsp;娱乐</span>
+                            </span>
+                            <span class="label label-info" style="margin-right: 10px" onclick="selectTag('军事')">
+                                <span class="glyphicon glyphicon-tags" style="font-size: 14px;line-height: 14px">&nbsp;军事</span>
+                            </span>
+                            <span class="label label-info" style="margin-right: 10px" onclick="selectTag('科学')">
+                                <span class="glyphicon glyphicon-tags" style="font-size: 14px;line-height: 14px">&nbsp;科学</span>
+                            </span>
+                            <br><br>
+                            <span class="btn btn-primary" onclick="cleanTag()" style="float: left">清除标签</span>
+                            <br><br>
+
+                </div>
+                <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error!=null}" style="margin-top: 20px;margin-bottom: 20px"></div>
                 <button type="submit" class="btn btn-success" style="float: right" th:if="${question==null}">发布</button>
                 <button type="submit" class="btn btn-success" style="float: right" th:if="${question!=null}">修改</button>
             </form>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <h3>问题发起指南</h3><br>
-            <div style="text-align:left;line-height: 30px;font-size: 20px">
+            <div style="text-align:left;line-height: 30px;font-size: 16px;color: #999">
                 问题标题:请用精简的语言表述您发布的问题<br>
                 问题补充:详细补充您的问题内容，保证问题清晰直观<br>
                 选择标签:选择一个或多个合适的标签，用逗号分隔<br>

@@ -45,7 +45,7 @@ public class CommentService {
     public List<CommentDTO> list(Integer id) {
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria().andParentIdEqualTo(id.longValue()).andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
-        commentExample.setOrderByClause("gmt_create");
+        commentExample.setOrderByClause("gmt_create DESC");
         List<Comment> comments = commentMapper.selectByExample(commentExample);
 
         if(comments.size()==0){

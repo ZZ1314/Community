@@ -4,6 +4,7 @@ import org.muye.community.dto.PaginationDTO;
 import org.muye.community.mapper.QuestionMapper;
 import org.muye.community.model.QuestionExample;
 import org.muye.community.model.User;
+import org.muye.community.provider.NotifyCountProvider;
 import org.muye.community.provider.UserProvider;
 import org.muye.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ public class IndexController {
     private QuestionMapper questionMapper;
     @Autowired
     private UserProvider userProvider;
+    @Autowired
+    private NotifyCountProvider notifyCountProvider;
 
     @GetMapping(value = {"/", "index"}, name = "主页跳转")
     public String index(Model model,
@@ -45,6 +48,7 @@ public class IndexController {
         User user = userProvider.getUser(request);
         if(user!=null){
             request.getSession().setAttribute("user", user);
+            notifyCountProvider.getNotifyCount(model, user);
         }
         return "index";
     }

@@ -13,6 +13,7 @@ import java.util.List;
 public class PaginationDTO {
     //当前展示信息列表
     private List<QuestionDTO> questions;
+    private List<NotificationDTO> notifications;
     //显示前一页
     private boolean showPrevious;
     //显示第一页
@@ -27,6 +28,7 @@ public class PaginationDTO {
     private Integer totalPage;
     //总计显示的页码列表
     private List<Integer> pages = new ArrayList<>();
+
 
     public void setPagination(Integer totalCount, Integer page, Integer size, Integer totalPage) {
         this.totalPage = totalPage;
@@ -49,4 +51,5 @@ public class PaginationDTO {
         showFirstPage = pages.contains(1)?false:true;
         showEndPage = pages.contains(totalPage)?false:true;
     }
+
 }

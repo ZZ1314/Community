@@ -22,4 +22,7 @@ public interface OriQuestionMapper {
     void increaseViewCount(Integer id);
     @Update("UPDATE question SET comment_count = comment_count + 1 WHERE id = #{id}")
     void increaseCommentCount(Integer id);
+//    @Select("SELECT * FROM question WHERE tag REGEXP #{tag} AND id!={id} ORDER BY gmt_modified DESC")
+    @Select("SELECT * FROM question WHERE tag REGEXP #{tag} AND id != #{id} ORDER BY gmt_modified DESC LIMIT 0,5")
+    List<Question> selectRelated(Question question);
 }

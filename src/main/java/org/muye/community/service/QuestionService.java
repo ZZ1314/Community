@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Zz
@@ -73,6 +74,9 @@ public class QuestionService {
             totalPage = totalCount / size + 1;
         }
         //对page范围进行约束
+        if(totalPage<=0){
+            totalPage=1;
+        }
         page = page < 1 ? 1 : page;
         page = page > totalPage ? totalPage : page;
         //计算分页的offset
@@ -102,12 +106,19 @@ public class QuestionService {
         return questionDTO;
     }
 
-    public QuestionDTO increaseViewCount(QuestionDTO questionDTO) {
+
+    public List<QuestionDTO> selectRelated(QuestionDTO queryQuestionDTO) {
+        String tag = queryQuestionDTO.getTag();
+        String reg = tag.replace(',', '|');
         Question question = new Question();
-        BeanUtils.copyProperties(questionDTO, question);
-        question.setViewCount(question.getViewCount()+1);
-        questionMapper.updateByPrimaryKey(question);
-        questionDTO.setViewCount(questionDTO.getViewCount()+1);
-        return questionDTO;
+        question.setId(queryQuestionDTO.getId());
+        question.setTag(reg);
+        List<Question> questions = oriQuestionMapper.selectRelated(question);
+        List<QuestionDTO> questionDTOS = questions.stream().map(q -> {
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(q, questionDTO);
+            return questionDTO;
+        }).collect(Collectors.toList());
+        return questionDTOS;
     }
 }

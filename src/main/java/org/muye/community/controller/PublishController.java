@@ -4,6 +4,7 @@ import org.muye.community.mapper.QuestionMapper;
 import org.muye.community.model.Question;
 import org.muye.community.model.QuestionExample;
 import org.muye.community.model.User;
+import org.muye.community.provider.NotifyCountProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,9 +24,13 @@ public class PublishController {
 
     @Autowired
     private QuestionMapper questionMapper;
+    @Autowired
+    private NotifyCountProvider notifyCountProvider;
 
     @GetMapping("/publish")
-    public String publish() {
+    public String publish(HttpServletRequest request,Model model) {
+        User user = (User) request.getSession().getAttribute("user");
+        notifyCountProvider.getNotifyCount(model, user);
         return "publish";
     }
 
@@ -37,6 +42,7 @@ public class PublishController {
             return "publish";
         }
         User user = (User) request.getSession().getAttribute("user");
+        notifyCountProvider.getNotifyCount(model, user);
         if (question.getId() == null) {
             question.setCreator(user.getId());
             question.setGmtCreate(System.currentTimeMillis());
@@ -63,6 +69,7 @@ public class PublishController {
 //        List<Question> questions = questionMapper.selectByExample(questionExample);
         Question question = questions.get(0);
         model.addAttribute(question);
+
         return "publish";
     }
 }
