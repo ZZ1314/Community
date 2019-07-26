@@ -29,23 +29,36 @@ public class QuestionService {
     @Autowired
     private OriQuestionMapper oriQuestionMapper;
 
-    public PaginationDTO list(Integer page, Integer size) {
+    public PaginationDTO list(Integer page, Integer size, String search) {
         //查询总数据计算总页数
         Integer totalPage;
         QuestionExample questionExampleCount = new QuestionExample();
         questionExampleCount.createCriteria().andIdIsNotNull();
-        Integer totalCount = questionMapper.countByExample(questionExampleCount);
+        Integer totalCount;
+        if (search == null||search.equals("")) {
+            totalCount = questionMapper.countByExample(questionExampleCount);
+        }else {
+            totalCount = oriQuestionMapper.countBySearch(search);
+        }
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
         } else {
             totalPage = totalCount / size + 1;
         }
         //对page范围进行约束
+        if(totalPage<=0){totalPage=1;}
         page = page < 1 ? 1 : page;
         page = page > totalPage ? totalPage : page;
         //计算分页的offset
         Integer offset = size * (page - 1);
-        List<Question> questions = oriQuestionMapper.list(offset, size);
+
+        List<Question> questions;
+        if (search == null || search.equals("")) {
+            questions = oriQuestionMapper.list(offset, size);
+        } else {
+            String replace = search.replace(' ', '|');
+            questions = oriQuestionMapper.searchQuestion(replace,offset,size);
+        }
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         //遍历question列表获取用户信息 加入questionDTO中传输
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -85,7 +98,7 @@ public class QuestionService {
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         //遍历question列表获取用户信息 加入questionDTO中传输
         PaginationDTO paginationDTO = new PaginationDTO();
-        if(questions.size()==0){
+        if (questions.size() == 0) {
             return paginationDTO;
         }
         for (Question question : questions) {

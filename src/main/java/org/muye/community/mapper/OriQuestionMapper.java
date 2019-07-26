@@ -25,4 +25,8 @@ public interface OriQuestionMapper {
 //    @Select("SELECT * FROM question WHERE tag REGEXP #{tag} AND id!={id} ORDER BY gmt_modified DESC")
     @Select("SELECT * FROM question WHERE tag REGEXP #{tag} AND id != #{id} ORDER BY gmt_modified DESC LIMIT 0,5")
     List<Question> selectRelated(Question question);
+    @Select("SELECT * FROM question WHERE title REGEXP #{replace} or description REGEXP #{replace} ORDER BY gmt_modified DESC LIMIT #{offset},#{size}")
+    List<Question> searchQuestion(String replace,Integer offset,Integer size);
+    @Select("SELECT COUNT(1) FROM question WHERE title REGEXP #{replace} or description REGEXP #{replace}")
+    Integer countBySearch(String search);
 }
